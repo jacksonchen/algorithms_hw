@@ -1,0 +1,7 @@
+*.aux
+.DS_Store
+*.fdb_latexmk
+*.fls
+*.log
+*.gz
+*.gnuplot
