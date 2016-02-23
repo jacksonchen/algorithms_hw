@@ -1,0 +1,117 @@
+\documentclass[11pt, letterpaper]{article}
+\usepackage[top=80pt,bottom=80pt,left=60pt,right=60pt]{geometry}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{titling}
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}
+}
+
+\begin{document}
+  \title{CSCI 3104 Assignment 4}
+    \subtitle{10:00 - 10:50 Wanshan}
+    \date{22 February 2016}
+    \author{Jackson Chen}
+    \maketitle
+
+  \begin{enumerate}
+    % Question 1
+    \item
+      \begin{enumerate}
+        \item
+          Have two index trackers (i and j) for each array. If the ith element in \texttt{a} is larger than the jth element
+          in \texttt{b}, then increment j. Otherwise increment i. If the two elements are equal, then return \texttt{true}.
+          Whenever i or j become larger than the size of their respective array, then return \texttt{false}.
+          \[ T(n) = O(n) \]
+
+          \begin{lstlisting}
+            i = 0
+            j = 0
+            while i < len(a) && j < len(b):
+              if a[i] > b[j]:
+                j++
+              else if a[i] < b[j]:
+                i++
+              else
+                return true
+            return false
+          \end{lstlisting}
+
+        \item
+          Loop through the array \texttt{b} and do a binary search for those elements in array \texttt{a}. The time complexity is
+          $O(n\log _{2}n)$ since each binary search requires a time complexity of $O(log_{2}n)$.
+
+          \begin{lstlisting}
+            for (i in range(len(b))):
+              if binarySearch(b[i], a):
+                return true
+            return false
+          \end{lstlisting}
+
+        \item
+          Loop through array \texttt{a} and check each element with each element in array \texttt{b}. The time complexity is $O(n^2)$.
+
+          \begin{lstlisting}
+            for (i in range(len(a))):
+              for (j in range(len(b))):
+                if (i == j):
+                  return true
+            return false
+          \end{lstlisting}
+
+          \item
+            Loop through the array \texttt{b} once and keep track of a counter of the number of elements in \texttt{b} that are smaller
+            than \textt{a}. Since the algorithm only loops through the array once, its time complexity is $\Theta (n)$.
+
+            \begin{lstlisting}
+              counter = 0
+              for (i in range(len(b))):
+                if (b[i] < minimum(a)):
+                  counter += 1
+              return counter
+            \end{lstlisting}
+
+          \item
+            Take the smaller heap of the two (whichever number \texttt{m} or \texttt{n} is smaller) and insert elements of that
+            heap into the larger heap. The time complexity is $\Theta (m\log _{2}n)$ if m is smaller than n.
+
+            \begin{lstlisting}
+              for (i in range(len(a))):
+                heapinsert(a[i], b)
+            \end{lstlisting}
+
+          \item
+            Find the largest element in a, and the smallest element in b. Check if the largest element is smaller than the smallest
+            element, if so print YES, else print NO.
+
+            \begin{lstlisting}
+              smallest = findSmallest(b)
+              largest = findLargest(a)
+              if (largest < smallest):
+                print("YES")
+              else:
+                print("NO")
+            \end{lstlisting}
+      \end{enumerate}
+
+    \item
+      \begin{enumerate}
+        \item
+          Min-heap: Add the new quote as a leaf to the tree. Then bubble the element up until it satisfies the requirements of a
+          min-heap.
+          \[ T(n) = O(\log _{2}n) \]
+        \item
+          BST: Start at the root, and check if the new quote is larger or smaller than that node. Then navigate down the tree in
+          this fashion until there is an open leaf that the quote can be added into.
+          \[ T(n) = O(\log _{2}n) \]
+        \item
+          Sorted Array: Loop through the array, once the algorithm reaches an element in the array that is larger than the added quote
+          then insert the quote into the spot before that larger element. This may require instantiating a new array with a larger size
+          and then copying all of the elements over.
+          \[ T(n) = O(n) \]
+      \end{enumerate}
+  \end{enumerate}
+\end{document}
