@@ -1,0 +1,94 @@
+\documentclass[11pt, letterpaper]{article}
+\usepackage[top=80pt,bottom=80pt,left=60pt,right=60pt]{geometry}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{titling}
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}
+}
+
+\begin{document}
+  \title{CSCI 3104 Assignment 5}
+    \subtitle{10:00 - 10:50 Wanshan}
+    \date{March 7 2016}
+    \author{Jackson Chen}
+    \maketitle
+
+  \begin{enumerate}
+    % Question 1
+    \item
+      \begin{enumerate}
+        \item
+          Assume root is the root node
+          \begin{lstlisting}
+            countNodes(root, x.key)
+
+            def countNodes(node, val):
+              if (node != null):
+                if (node.key < val):
+                  return 1 + countNodes(node.left_node, val)
+                           + countNodes(node.right_node, val)
+                else:
+                  return countNodes(node.left_node, val)
+              else:
+                return 0
+          \end{lstlisting}
+        \item
+            Assume root is the root node
+          \begin{lstlisting}
+            countNode(root, x.key, 0)
+
+            def countNode(node, target, total):
+              if (node != null):
+                if (node.key < target.key):
+                  total += node.left_node.s
+                  total += 1 # for the node itself
+                  return countNode(node.right_node, target, total)
+                elsif (node.key == target.key):
+                  total += node.left_node.s
+                  return total
+                else:
+                  return countNode(node.left_node, target, total)
+              else:
+                return 0
+          \end{lstlisting}
+      \end{enumerate}
+    \item
+        High level steps:
+        \begin{enumerate}
+          \item Sort the intervals by end times.
+          \item Find the start time for the last interval
+          \item Find the closest end time that is before that start time with binary search
+          \item Check if there are any start times between that end and start time  with binary search
+          \item If not, the interval between that end and start time is a free interval
+          \item If so, then shorten the free interval to that end time and the new start
+          \item Repeat steps b-f for that end time
+        \end{enumerate}
+        Pseudocode:
+        \begin{lstlisting}
+          free = []
+          Iarr = [I1, I2, ..., In]
+          quickSort(Iarr) // Sorts the ending time in ascending order
+          tmp = len(Iarr)-1
+          while (Iarr[tmp][0] > 0):
+            freeStart = binarySearch(Iarr, Iarr[tmp][0])
+            freeEnd = binarySearch(Iarr, Iarr[freeStart][1])
+            free.push([Iarr[freeStart][1], Iarr[freeEnd][0]])
+            tmp = freeStart
+        \end{lstlisting}
+    \item
+      Assume the binary search function finds the latest starting time in a time interval
+      \begin{lstlisting}
+        colissions = []
+        Iarr = [I1, I2, ..., In]
+        quickSort(Iarr) // Sorts starting time in ascending order
+        for (i in range(len(Iarr))):
+          n = binarySearch(Iarr, Iarr[i][1])
+          colissions.push(n - i)
+        return findMax(colissions)
+      \end{lstlisting}
+  \end{enumerate}
+\end{document}
