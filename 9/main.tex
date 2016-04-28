@@ -1,0 +1,108 @@
+\documentclass[11pt, letterpaper]{article}
+\usepackage[top=80pt,bottom=80pt,left=60pt,right=60pt]{geometry}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{titling}
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}
+}
+
+\begin{document}
+  \title{CSCI 3104 Assignment 9}
+    \subtitle{10:00 - 10:50 Wanshan}
+    \date{April 28 2016}
+    \author{Jackson Chen}
+    \maketitle
+
+  \begin{enumerate}
+    % Question 1
+    \item
+      \begin{enumerate}
+        \item
+            Start at the root node, then progress through the graph. Once the algorithm reaches the end of a branch,
+            then backtrack and then proceed along the first edge path that hasn't been used yet. If the algorithm is going
+            along a new path but reaches a node that has already been visited, then it is not a spanning tree. If at the end of this
+            all of the nodes were visited and none were visited twice (except during backtracking), then it is a spanning tree.
+        \item
+          The point of a minimum spanning tree is to have the smallest sum of weighted paths connecting the tree. If there is an edge
+          in the tree that is greater than an edge outside of the tree connecting two points, then during the construction of the tree,
+          a safe edge was not added since during the step that added an edge of weight greater than $w$, the light edge (which is the
+          edge of weight $w$) was not added. Therefore $T$ is not a MST of $G$.
+        \item
+          None of the MST Path Greatest Weights are greater than $e: (u, v)$. Therefore $T$ is a MST.
+          \begin{table}[h]
+          \centering
+          \begin{tabular}{llll}
+          \textbf{Edge}     & $e: (u, v)$     & MST Path        & MST Path Greatest Weight   \\
+          \textbf{3, 4}     & 1.0               & 3-2-7-4       & 0.8                \\
+          \textbf{5, 7}     & 1.2               & 5-4-7         & 1.1                \\
+          \textbf{6, 7}     & 1.1               & 6-1-2-7       & 0.6                \\
+          \textbf{6, 8}     & 0.8               & 6-1-8         & 0.5       \\
+          \textbf{8, 9}     & 0.8               & 8-1-6-9       & 0.7         \\
+          \textbf{9, 10}    & 0.7               & 9-6-1-2-7-10  & 0.7              \\
+          \end{tabular}
+          \end{table}
+        \item
+          $e_{min}$ would be the smallest $n$ edges in the graph up to the point where two weight edges are identical. Since
+          in part B, the construction of an MST consists of adding safe edges, which means all the light edges (the minimum edges
+          between $S$ and $V$) are appended to the MST. Therefore the smallest $n$ edges (which is $e_{min}$) must be added to the MST.
+        \item
+          Prim's algorithm only adds safe nodes (which involves taking light edges, edges that satisfy certain requirements
+          as well as takes the lowest weight edges that cross a cut). When node $u$ is the starting node, the algorithm will take
+          the edge $(u, v)$ because it is a safe edge (it crosses a cut that respects T and is a light edge).
+        \item
+          \begin{itemize}
+            \item
+              The same tree except with the edge $9-10$ instead of $7-10$.
+            \item
+              The same tree except with the edge $9-10$ instead of $6-9$.
+          \end{itemize}
+      \end{enumerate}
+    % Question 2
+    \item
+      \begin{enumerate}
+        \item
+          There are 25 decision variables from $x_{11}$ to $x_{55}$, represented in the general form $x_{ij}$. When person $i$ does
+          task $j$, then $x_{ij}$ is 1, otherwise it is 0.
+        \item
+          $x_{15} + x_{25} + x_{35} + x_{45} + x_{55} = 1$
+        \item
+          Assuming $T = 35$. \\
+          $x_{41}*T_1 + x_{42}*T_2 + x_{43}*T_3 + x_{44}*T_4 + x_{45}*T_5 = 14$
+        \item
+          $A_3 = x_{31}*P_{3}[0] + x_{31}*P_{3}[1] + x_{31}*P_{3}[2] + x_{31}*P_{3}[3] + x_{31}*P_{3}[4]$
+        \item
+          \begin{lstlisting}
+            import math
+
+            t = [5, 10, 2, 8, 10]
+            p = [[2, 1, 3, 4, 5], [3, 2, 4, 1, 5], [4, 2, 3, 5, 1], [1, 2, 3, 5, 4], [3, 4, 2, 1, 5]]
+
+            temp = []
+            for i in range(24):
+                temp.append(0)
+
+            mina = 100000
+            for i in range(0, 21):
+                for j in range(i+1, 22):
+                    for k in range(j+1, 23):
+                        for l in range(k+1, 24):
+                            for m in range(l+1, 25):
+                                a = p[int(math.floor(i/5))][i % 5] +
+                                    p[int(math.floor(j/5))][j % 5] +
+                                    p[int(math.floor(k/5))][k % 5] +
+                                    p[int(math.floor(l/5))][l % 5] +
+                                    p[int(math.floor(m/5))][m % 5]
+                                if a < mina:
+                                    mina = a
+            print mina
+          \end{lstlisting}
+          Answer \boxed{5}
+      \end{enumerate}
+  \end{enumerate}
+\end{document}
+
+% \begin{lstlisting}
