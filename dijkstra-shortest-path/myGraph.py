@@ -1,4 +1,5 @@
 from priorityQueue import PriorityQueue
+import decimal
 
 class MyGraph:
 
@@ -8,23 +9,23 @@ class MyGraph:
     # Eg., if vertex 2 has three edges (2,3) with weight 4.5, (2,4) with weight 3.2, and (2,5) with 2.1
     #    self.adjList[2] is the list [ (3,4.5), (4,3.2), (5,2.12) ]
     # your goal is to implement the singleSourceShortestPath function.
-    
-    
+
+
     def __init__(self, nVertices):
         # self.n represents the number of vertices of the graph
         self.n = nVertices
         # Adjacency list is initially emtpy
         # adjList[i] = [ (j1, w1), ..., (jk,wk) ]
         #   is a list of adjacent vertices and associated edge weights w1,...,wk
-        
+
         self.adjList = [ [] for i in range(0,nVertices) ]
-        
+
 
     def getName(self,i):
         # Get the name for vertex i: currently it is just i
         return str(i)
 
-        
+
     def addEdge(self,i,j,w):
         # Add an edge to graph from i to j with weight w
         assert( i >= 0 and i < self.n)
@@ -32,9 +33,9 @@ class MyGraph:
         # Append j to adjacency list of i
         lst = self.adjList[i]
         lst.append( (j,w) ) # Add j as adjacent with weight w
-      
 
-        
+
+
     def prettyPrintAdjacencyList(self):
         # Pretty print the adjacency list
         for i in range(0,self.n): #Iterate over all vertices
@@ -46,8 +47,8 @@ class MyGraph:
                 sep=', '
             print(']')
 
-        
-        
+
+
     def singleSourceShortestPath(self, srcID):
         assert (srcID >= 0 and srcID < self.n)
         # Implement Dijkstra's algorithm
@@ -60,21 +61,42 @@ class MyGraph:
 
         # Initialize the priority queue
         pq = PriorityQueue(self.n) #create the priority queue
-        
+
         for i in range(0,self.n): # Iterate through all vertex ID
             if ( i == srcID):     # If ID is srcID
                 pq.set(i,0.0)     # Distance of srcID should be zero
             else:                 # ID is not srcID
                 pq.set(i, pq.Inf) # Distance should be infinity
-        
+
         d = {}  # Initialize the map with distances to nodes
         pi = {} # Initialize the map with parents of vertices
-        
-        # COMPLETE the Dijkstra code here
 
-            
+        minNode = pq.extractMin()
+        parent = minNode[0]
+        d[minNode[0]] = minNode[1]
+        pi[minNode[0]] = parent
+
+        while not pq.isEmpty():
+            lst = self.adjList[parent]
+            print(lst)
+            for i in range(len(lst)):
+                if pq.hasKey(lst[i][0]):
+                    if pq.get(lst[i][0]) > lst[i][1]:
+                        pi[lst[i][0]] = parent
+                        pq.set(lst[i][0], lst[i][1])
+            minNode = pq.extractMin()
+            print(minNode[0])
+            print("Distances", d)
+            print("Parents", pi)
+            print(pq.prettyPrint())
+            if minNode[1] != pq.Inf:
+                d[minNode[0]] = float(round(decimal.Decimal(d[pi[minNode[0]]] + minNode[1]), 2))
+                parent = minNode[0]
+            else:
+                d[minNode[0]] = pq.Inf
+
         return (d,pi)
-        
+
     def getShortestPath(self,d,pi,srcID, destID):
         # Routine to retreive shortest path
         # d: map for each vertex v to its distance from shortest path
@@ -94,13 +116,13 @@ class MyGraph:
             curNode = pi[curNode]
             lst.insert(0,curNode)
         return lst
-            
-            
+
+
 # Test our graph
 
 def test1():
     g = MyGraph(5)
-    
+
     # Edges
     g.addEdge(0,1,0.1) # a -> b
     g.addEdge(0,2,0.3) # a -> c
@@ -119,7 +141,7 @@ def test1():
             print (i ,' ---> ', d[i])
     lst=g.getShortestPath(d,pi,0,4)
     print('Shortest path from 0 to 4:',lst)
-    
+
 
 def test2():
     g = MyGraph(8)
@@ -146,11 +168,10 @@ def test2():
             print (i ,' ---> ', d[i])
     lst=g.getShortestPath(d,pi,2,7)
     print('Shortest path from 2 to 7:',lst)
-   
-    
+
+
 if (__name__=='__main__'):
     print('Graph Test # 1')
     test1()
     print('Graph Test # 2')
-    test2()        
-    
+    test2()
