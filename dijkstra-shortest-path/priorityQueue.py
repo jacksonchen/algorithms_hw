@@ -63,9 +63,6 @@ class PriorityQueue:
         m = len(self.d)
         return (m <= 0)
 
-    def prettyPrint(self):
-        print("Priority Queue", self.d)
-
 
 #TEST priority Queue
 

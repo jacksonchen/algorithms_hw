@@ -71,29 +71,25 @@ class MyGraph:
         d = {}  # Initialize the map with distances to nodes
         pi = {} # Initialize the map with parents of vertices
 
-        minNode = pq.extractMin()
-        parent = minNode[0]
-        d[minNode[0]] = minNode[1]
-        pi[minNode[0]] = parent
+        parent = None
 
         while not pq.isEmpty():
-            lst = self.adjList[parent]
-            print(lst)
-            for i in range(len(lst)):
-                if pq.hasKey(lst[i][0]):
-                    if pq.get(lst[i][0]) > lst[i][1]:
-                        pi[lst[i][0]] = parent
-                        pq.set(lst[i][0], lst[i][1])
             minNode = pq.extractMin()
-            print(minNode[0])
-            print("Distances", d)
-            print("Parents", pi)
-            print(pq.prettyPrint())
-            if minNode[1] != pq.Inf:
-                d[minNode[0]] = float(round(decimal.Decimal(d[pi[minNode[0]]] + minNode[1]), 2))
-                parent = minNode[0]
+            if parent is None:
+                d[minNode[0]] = minNode[1]
+                pi[minNode[0]] = minNode[0]
+            elif minNode[1] != pq.Inf:
+                d[minNode[0]] = float(round(decimal.Decimal(minNode[1]), 2))
             else:
                 d[minNode[0]] = pq.Inf
+
+            lst = self.adjList[minNode[0]]
+            for i in range(len(lst)):
+                if pq.hasKey(lst[i][0]) and pq.get(lst[i][0]) > lst[i][1] + d[minNode[0]]:
+                    pi[lst[i][0]] = minNode[0]
+                    pq.set(lst[i][0], lst[i][1] + d[minNode[0]])
+
+            parent = minNode[0]
 
         return (d,pi)
 
